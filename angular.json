@@ -133,6 +133,41 @@
           }
         }
       }
+    },
+    "ngx-sticky-navbar": {
+      "root": "projects/ngx-sticky-navbar",
+      "sourceRoot": "projects/ngx-sticky-navbar/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-sticky-navbar/tsconfig.lib.json",
+            "project": "projects/ngx-sticky-navbar/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-sticky-navbar/src/test.ts",
+            "tsConfig": "projects/ngx-sticky-navbar/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-sticky-navbar/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-sticky-navbar/tsconfig.lib.json",
+              "projects/ngx-sticky-navbar/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "scroll-speed"

@@ -1,0 +1,11 @@
+.ngx-speed-scroll {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: 0.3s top;
+  &_hidden {
+    top: -100%;
+    transition: 1s top;
+  }
+}

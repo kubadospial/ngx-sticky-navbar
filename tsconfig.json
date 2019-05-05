@@ -16,6 +16,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-speed-scroll": [
+        "dist/ngx-speed-scroll"
+      ],
+      "ngx-speed-scroll/*": [
+        "dist/ngx-speed-scroll/*"
+      ]
+    }
   }
 }
