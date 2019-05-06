@@ -12,7 +12,6 @@ import { Settings, NavbarState } from '../../../models';
 })
 
 export class NgxStickyNavbarComponent implements OnInit, OnDestroy {
-    @Input() scrollableElement: string;
     @Input() settings: Settings;
     @Input() isAutoTopOffsetDisabled = true;
     @Input() isSpacerDisabled = true;

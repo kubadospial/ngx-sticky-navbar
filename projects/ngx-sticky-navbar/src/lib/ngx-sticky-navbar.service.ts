@@ -10,10 +10,10 @@ export class NgxStickyNavbarService {
   changeSettings$ = new Subject<Settings>();
   initialSettings: Settings = {
     senseSpeed: {
-      top: DefinedSensitivity.veryHigh,
-      bottom: DefinedSensitivity.Low
+      top: DefinedSensitivity.veryLow,
+      bottom: DefinedSensitivity.veryHigh
     },
-    topOffset: 100
+    topOffset: 300
   };
 
 }

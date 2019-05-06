@@ -15,7 +15,6 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
             ...settings
         };
     }
-    @Input() scrollableElement: string;
 
     @Output() isScrollDetected = new EventEmitter<string>();
 
@@ -30,8 +29,8 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     constructor(@Inject(DOCUMENT) private document, private scrollService: NgxStickyNavbarService) { }
 
     ngOnInit() {
-        if (!!this.scrollableElement) {
-            const element = this.document.querySelector(this.scrollableElement);
+        if (!!this._settings.scrollableElement) {
+            const element = this.document.querySelector(this._settings.scrollableElement);
             if (!!element) {
                 this._scrollableElement = element;
             }
@@ -39,8 +38,7 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
         fromEvent(this._scrollableElement, 'scroll')
             .pipe(
                 takeUntil(this._destroy$)
-            )
-            .subscribe(_ => {
+            ).subscribe(_ => {
                 this._scrollTop = this._scrollableElement.scrollTop;
                 this._speedScrollDetection();
                 this._previousScroll = this._scrollTop;
@@ -64,6 +62,9 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     private _speedScrollDetection() {
         let speedSenseTop = 0;
         let speedSenseBottom = 0;
+        if (this._scrollTop <= this._settings.topOffset && this._isScrollingTop) {
+            this.isScrollDetected.next(NavbarState.SHOW);
+        }
         if (typeof this._settings.senseSpeed.top === 'string') {
             speedSenseTop = DefinedSensitivity[this._settings.senseSpeed.top];
         } else {
@@ -79,9 +80,10 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
         } else if (this._scrollTop - speedSenseBottom > this._previousScroll) {
             this.isScrollDetected.next(NavbarState.HIDE);
         }
-        if (this._scrollTop <= this._settings.topOffset) {
-            this.isScrollDetected.next(NavbarState.SHOW);
-        }
+    }
+
+    private get _isScrollingTop() {
+        return this._scrollTop < this._previousScroll;
     }
 
 }

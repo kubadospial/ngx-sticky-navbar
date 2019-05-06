@@ -1,5 +1,30 @@
-<ngx-sticky-navbar [scrollableElement]="'.scrollable'">
-  <nav class="nav">test</nav>
+<ngx-sticky-navbar [settings]="settings">
+  <nav class="nav"
+       [formGroup]="sensGroup">
+    <div class="nav__options"
+         formGroupName="senseSpeed">
+      <div class="nav__option">
+        <p>Sensitivity Scroll To Top</p>
+        <select formControlName="top">
+          <option value="veryLow">veryLow</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+          <option value="veryHigh">veryHigh</option>
+        </select>
+      </div>
+      <div class="nav__option">
+        <p>Sensitivity Scroll To Bottom</p>
+        <select formControlName="bottom">
+          <option value="veryLow">veryLow</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+          <option value="veryHigh">veryHigh</option>
+        </select>
+      </div>
+    </div>
+  </nav>
 </ngx-sticky-navbar>
 <div class="scrollable">
   <div class="scrollable__big-element"></div>

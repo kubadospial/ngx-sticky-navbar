@@ -7,7 +7,6 @@
      #navbar
      [ngClass]="{'ngx-speed-scroll_hidden': isNavbarState === navbarState.HIDE}"
      [settings]="settings"
-     [scrollableElement]="scrollableElement"
      (isScrollDetected)="onScrollDetected($event)">
     <ng-content></ng-content>
 </div>

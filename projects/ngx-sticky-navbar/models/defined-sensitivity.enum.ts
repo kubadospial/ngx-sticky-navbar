@@ -1,7 +1,7 @@
 export enum DefinedSensitivity {
-    veryLow = 10,
-    Low = 20,
+    veryLow = 50,
+    Low = 40,
     Medium = 30,
-    High = 40,
-    veryHigh = 50
+    High = 20,
+    veryHigh = 10
 }

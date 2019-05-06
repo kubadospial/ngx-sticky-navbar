@@ -3,5 +3,6 @@ export interface Settings {
         top?: number | string,
         bottom?: number | string
     };
-    topOffset: number;
+    scrollableElement?: string;
+    topOffset?: number;
 }
