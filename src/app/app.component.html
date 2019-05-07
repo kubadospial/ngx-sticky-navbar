@@ -4,24 +4,44 @@
     <div class="nav__options"
          formGroupName="senseSpeed">
       <div class="nav__option">
-        <p>Sensitivity Scroll To Top</p>
-        <select formControlName="top">
-          <option value="veryLow">veryLow</option>
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-          <option value="veryHigh">veryHigh</option>
-        </select>
+        <h4>Sensitivity Scroll To Top</h4>
+        <div class="nav__option-wrapper">
+          <p class="nav__range-label">{{rangeLabelTop}}</p>
+          <input type="range"
+                 min="10"
+                 max="50"
+                 step="10"
+                 class="nav__range"
+                 formControlName="top">
+          <div class="nav__checkbox">
+            <label for="top">
+              lock show
+            </label>
+            <input type="checkbox"
+                   id="top"
+                   formControlName="checkboxesTop">
+          </div>
+        </div>
       </div>
       <div class="nav__option">
-        <p>Sensitivity Scroll To Bottom</p>
-        <select formControlName="bottom">
-          <option value="veryLow">veryLow</option>
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-          <option value="veryHigh">veryHigh</option>
-        </select>
+        <h4>Sensitivity Scroll To Bottom</h4>
+        <div class="nav__option-wrapper">
+          <p class="nav__range-label">{{rangeLabelBottom}}</p>
+          <input type="range"
+                 min="10"
+                 max="50"
+                 step="10"
+                 class="nav__range"
+                 formControlName="bottom">
+          <div class="nav__checkbox">
+            <label for="bottom">
+              lock hide
+            </label>
+            <input type="checkbox"
+                   id="bottom"
+                   formControlName="checkboxesBottom">
+          </div>
+        </div>
       </div>
     </div>
   </nav>

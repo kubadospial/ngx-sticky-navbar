@@ -60,26 +60,34 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     }
 
     private _speedScrollDetection() {
-        let speedSenseTop = 0;
-        let speedSenseBottom = 0;
         if (this._scrollTop <= this._settings.topOffset && this._isScrollingTop) {
             this.isScrollDetected.next(NavbarState.SHOW);
         }
+        if (this._scrollTop + this._senseSpeedTop < this._previousScroll) {
+            this.isScrollDetected.next(NavbarState.SHOW);
+        } else if (this._scrollTop - this._senseSpeedBottom > this._previousScroll) {
+            this.isScrollDetected.next(NavbarState.HIDE);
+        }
+    }
+
+    private get _senseSpeedTop(): number {
+        let speedSenseTop = 0;
         if (typeof this._settings.senseSpeed.top === 'string') {
             speedSenseTop = DefinedSensitivity[this._settings.senseSpeed.top];
         } else {
             speedSenseTop = this._settings.senseSpeed.top;
         }
+        return speedSenseTop;
+    }
+
+    private get _senseSpeedBottom(): number {
+        let speedSenseBottom = 0;
         if (typeof this._settings.senseSpeed.bottom === 'string') {
             speedSenseBottom = DefinedSensitivity[this._settings.senseSpeed.bottom];
         } else {
             speedSenseBottom = this._settings.senseSpeed.bottom;
         }
-        if (this._scrollTop + speedSenseTop < this._previousScroll) {
-            this.isScrollDetected.next(NavbarState.SHOW);
-        } else if (this._scrollTop - speedSenseBottom > this._previousScroll) {
-            this.isScrollDetected.next(NavbarState.HIDE);
-        }
+        return speedSenseBottom;
     }
 
     private get _isScrollingTop() {

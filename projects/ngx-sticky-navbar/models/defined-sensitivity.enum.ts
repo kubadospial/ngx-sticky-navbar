@@ -1,4 +1,5 @@
 export enum DefinedSensitivity {
+    Locked = 10000,
     veryLow = 50,
     Low = 40,
     Medium = 30,
