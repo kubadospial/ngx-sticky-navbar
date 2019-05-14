@@ -11,7 +11,7 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
 
     @Output() isScrollDetected = new EventEmitter<string>();
 
-    private _scrollableElement = this.document.body;
+    private _scrollableElement: HTMLElement = this.document.body;
     private _previousScroll = 0;
     private _scrollTop = 0;
     private _destroy$ = new Subject<void>();
@@ -20,7 +20,10 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
         ...this.navbarService.initialSettings
     };
 
-    constructor(@Inject(DOCUMENT) private document, private navbarService: NgxStickyNavbarService, private renderer: Renderer2) { }
+    constructor(
+        @Inject(DOCUMENT) private document,
+        private navbarService: NgxStickyNavbarService,
+        private renderer: Renderer2) { }
 
     ngOnInit() {
         this.navbarService.changeSettings$.pipe(
@@ -34,7 +37,7 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
                     this._settings.spacer.height
                 );
             }
-            this._initSubs(settings)
+            this._initSubs(settings);
         });
 
     }
@@ -42,14 +45,16 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     ngOnDestroy() {
         this._destroy$.next();
         this._destroy$.complete();
+        this._breakSub$.next();
+        this._breakSub$.complete();
     }
 
     private _initSubs(settings: Settings) {
         this._breakSub$.next();
         this._functionSubs(settings);
     }
+
     private _functionSubs(settings: Settings) {
-        console.log(this._settings)
         this._settings = settings;
         if (!!this._settings.scroll.element) {
             const element = this.document.querySelector(this._settings.scroll.element);
@@ -65,8 +70,6 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
                 this._speedScrollDetection();
                 this._previousScroll = this._scrollTop;
             });
-
-
     }
 
     private _spacerCreator(element: ElementRef, type: SpacerTypes, height: number) {

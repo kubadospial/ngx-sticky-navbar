@@ -71,15 +71,15 @@ export class AppComponent {
   }
 
   ngAfterViewInit() {
-    // this._settings = {
-    //   ...this._settings,
-    //   spacer: {
-    //     ...this._settings.spacer,
-    //     element: this.spacerElement,
-    //     autoHeight: true,
-    //     type: SpacerTypes.PADDING
-    //   }
-    // };
+    this._settings = {
+      ...this._settings,
+      spacer: {
+        ...this._settings.spacer,
+        element: this.spacerElement,
+        autoHeight: true,
+        type: SpacerTypes.PADDING
+      }
+    };
     this._navbarService.mergeSettingObject(this._settings);
   }
 
