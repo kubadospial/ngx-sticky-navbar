@@ -36,6 +36,9 @@ export class AppComponent {
         bottom: new FormControl(),
         checkboxesTop: new FormControl(false),
         checkboxesBottom: new FormControl(false)
+      }),
+      spacer: new FormGroup({
+        spacerToggler: new FormControl(this.settings.spacer.autoHeight)
       })
     });
     this.sensGroup.patchValue(this._navbarService.initialSettings);
@@ -49,8 +52,14 @@ export class AppComponent {
         if (settings.sensitivity.checkboxesBottom) {
           settings.sensitivity = { ...settings.sensitivity, bottom: DefinedSensitivity.Locked };
         }
-        const sets = { sensitivity: {} };
+        const sets: Settings = { sensitivity: {} };
         sets.sensitivity = { top: settings.sensitivity.top, bottom: settings.sensitivity.bottom };
+        if (settings.spacer.spacerToggler) {
+          sets.spacer = { ...this._navbarService.settings.spacer, autoHeight: true }
+        } else {
+          sets.spacer = { autoHeight: false, height: 0 }
+        }
+        console.log(sets)
         return sets;
       }),
       tap((stngs: Settings) => {
