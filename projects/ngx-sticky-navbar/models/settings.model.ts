@@ -16,8 +16,7 @@ export interface Settings {
         element?: string,
         offset?: {
             top?: number,
-            autoTop?: boolean,
-            bottom?: number
+            autoTop?: boolean
         }
     }
 }

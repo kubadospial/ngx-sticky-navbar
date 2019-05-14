@@ -38,6 +38,7 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
             })
         ).subscribe(_ => {
             this._scrollTop = this._scrollableElement.scrollTop;
+            this._isScrolledToTopWithOffset();
             this._speedScrollDetection();
             this._previousScroll = this._scrollTop;
         });
@@ -61,10 +62,13 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
         this.renderer.setProperty(element.nativeElement, 'style', `${ type }:${ height }px`);
     }
 
-    private _speedScrollDetection() {
+    private _isScrolledToTopWithOffset() {
         if (this._scrollTop <= this.navbarService.settings.scroll.offset.top && this._isScrollingTop) {
             this.isScrollDetected.next(NavbarState.SHOW);
         }
+    }
+
+    private _speedScrollDetection() {
         if (this._scrollTop + this._senseSpeedTop < this._previousScroll) {
             this.isScrollDetected.next(NavbarState.SHOW);
         } else if (this._scrollTop - this._senseSpeedBottom > this._previousScroll) {

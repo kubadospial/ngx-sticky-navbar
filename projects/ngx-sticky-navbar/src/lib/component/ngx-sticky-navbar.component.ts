@@ -60,19 +60,17 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     ngAfterViewInit() {
-        setTimeout(() => {
-            if (this.navbarService.settings.spacer.autoHeight) {
-                this.elementHeight = this.navbar.nativeElement.offsetHeight;
-                const settings = {
-                    ...this.navbarService.settings,
-                    spacer: {
-                        ...this.navbarService.settings.spacer,
-                        height: this.elementHeight
-                    }
+        if (this.navbarService.settings.spacer.autoHeight) {
+            this.elementHeight = this.navbar.nativeElement.offsetHeight;
+            const settings = {
+                ...this.navbarService.settings,
+                spacer: {
+                    ...this.navbarService.settings.spacer,
+                    height: this.elementHeight
                 }
-                this.navbarService.mergeSettingObject(settings);
             }
-        }, 0);
+            this.navbarService.mergeSettingObject(settings);
+        }
     }
 
     ngOnDestroy() {
