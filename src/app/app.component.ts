@@ -16,13 +16,17 @@ export class AppComponent {
   definedSensitivity = DefinedSensitivity;
   rangeLabelTop: string;
   rangeLabelBottom: string;
-  private _settings: Settings = {
+  settings: Settings = {
+    spacer: {
+      autoHeight: true,
+      type: SpacerTypes.PADDING
+    },
     scroll: {
       element: '.scrollable',
       offset: {
         autoTop: true
       }
-    },
+    }
   };
 
   constructor(private _navbarService: NgxStickyNavbarService) {
@@ -57,8 +61,8 @@ export class AppComponent {
       distinctUntilChanged(),
       debounceTime(100)
     ).subscribe((settings: Settings) => {
-      this._settings = { ...this._settings, ...settings };
-      this._navbarService.mergeSettingObject(this._settings);
+      this.settings = { ...this.settings, ...settings };
+      this._navbarService.mergeSettingObject(this.settings);
     });
 
     this.sensGroup.get('sensitivity').get('checkboxesTop').valueChanges.subscribe(status => {
@@ -71,16 +75,14 @@ export class AppComponent {
   }
 
   ngAfterViewInit() {
-    this._settings = {
-      ...this._settings,
+    this.settings = {
+      ...this.settings,
       spacer: {
-        ...this._settings.spacer,
+        ...this.settings.spacer,
         element: this.spacerElement,
-        autoHeight: true,
-        type: SpacerTypes.PADDING
       }
     };
-    this._navbarService.mergeSettingObject(this._settings);
+    this._navbarService.mergeSettingObject(this.settings);
   }
 
   private _getRangeLabelTop(settings: Settings) {

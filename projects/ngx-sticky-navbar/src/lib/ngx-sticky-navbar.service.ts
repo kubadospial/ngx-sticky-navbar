@@ -26,46 +26,71 @@ export class NgxStickyNavbarService {
     }
   };
 
-  private _settings: Settings = this.initialSettings;
+  settings: Settings = this.initialSettings;
+  
+  setGlobalSettings(settings: Settings) {
+    this.settings = this.parseNewSettingsObject(this.settings, settings);
+  }
 
   mergeSettingObject(settings: Settings) {
+    this.setGlobalSettings(settings);
+    this.changeSettings$.next(this.settings);
+  }
+
+  parseNewSettingsObject(oldSets: Settings, newSets: Settings): Settings {
     let sets: Settings = {
-      ...this._settings,
-      ...settings,
+      ...oldSets,
+      ...newSets,
     };
-    if (!!settings.spacer) {
+    if (!!newSets.spacer) {
       sets = {
         ...sets,
-        spacer: {
-          ...this._settings.spacer,
-          ...settings.spacer,
+        ...this._setSpace(oldSets, newSets)
+      }
+    }
+    if (!!newSets.sensitivity) {
+      sets = {
+        ...sets,
+        ...this._setSensitivity(oldSets, newSets)
+      }
+    }
+    if (!!newSets.scroll) {
+      sets = {
+        ...sets,
+        ...this._setScroll(oldSets, newSets)
+      }
+    }
+    return sets;
+  }
+
+  private _setSpace(oldSets: Settings, newSets: Settings) {
+    return {
+      spacer: {
+        ...oldSets.spacer,
+        ...newSets.spacer,
+      }
+    }
+  }
+  private _setSensitivity(oldSets: Settings, newSets: Settings) {
+    return {
+      sensitivity: {
+        ...oldSets.sensitivity,
+        ...newSets.sensitivity
+      }
+    }
+  }
+
+  private _setScroll(oldSets: Settings, newSets: Settings) {
+    return {
+      scroll: {
+        ...oldSets.scroll,
+        ...newSets.scroll,
+        offset: {
+          ...oldSets.scroll.offset,
+          ...newSets.scroll.offset
         }
       }
     }
-    if (!!settings.sensitivity) {
-      sets = {
-        ...sets,
-        sensitivity: {
-          ...this._settings.sensitivity,
-          ...settings.sensitivity
-        }
-      }
-    }
-    if (!!settings.scroll) {
-      sets = {
-        ...sets,
-        scroll: {
-          ...this._settings.scroll,
-          ...settings.scroll,
-          offset: {
-            ...this._settings.scroll.offset,
-            ...settings.scroll.offset
-          }
-        }
-      }
-    }
-    this._settings = sets;
-    this.changeSettings$.next(sets);
   }
 
 }

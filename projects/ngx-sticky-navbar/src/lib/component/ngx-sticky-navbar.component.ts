@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { NgxStickyNavbarService } from '../ngx-sticky-navbar.service';
 import { Subject, fromEvent, of, Observable } from 'rxjs';
-import { takeUntil, debounceTime, combineLatest, switchMap } from 'rxjs/operators';
+import { takeUntil, debounceTime, combineLatest, switchMap, startWith } from 'rxjs/operators';
 import { Settings, NavbarState } from '../../../models';
 
 @Component({
@@ -11,14 +11,13 @@ import { Settings, NavbarState } from '../../../models';
 })
 
 export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('navbar') navbar: ElementRef;
     navbarState = NavbarState;
     isNavbarState = NavbarState.SHOW;
     elementHeight = 0;
-
-    private _settings: Settings = this.navbarService.initialSettings;
     private _destroy$ = new Subject<void>();
 
+    @Input() settings: Settings;
+    @ViewChild('navbar') navbar: ElementRef;
     constructor(private navbarService: NgxStickyNavbarService) { }
 
     ngOnInit() {
@@ -26,50 +25,52 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
             takeUntil(this._destroy$),
             switchMap((settings: Settings) => of(settings).pipe(
                 combineLatest(this._resizeEvent)
-            ))
-        ).subscribe(([settings, _]: [Settings, Event?]) => {
-            this._settings = { ...this._settings, ...settings };
-            this.navbarService.initialSettings.scroll.offset.top = this.navbar.nativeElement.offsetHeight;
+            )),
+            startWith([this.settings, new Event('resize')])
+        ).subscribe(([settings, _]: [Settings, Event]) => {
+            this.navbarService.setGlobalSettings(settings);
             this.elementHeight = this.navbar.nativeElement.offsetHeight;
-            if (this._settings.spacer.autoHeight) {
-                settings = {
-                    ...this._settings,
+
+            let sets: Settings = {};
+            if (this.navbarService.settings.spacer.autoHeight) {
+                sets = {
+                    ...this.navbarService.settings,
                     spacer: {
-                        ...this._settings.spacer,
+                        ...this.navbarService.settings.spacer,
                         height: this.elementHeight
                     }
                 }
             }
-            if (this._settings.scroll.offset.autoTop) {
-                settings = {
-                    ...this._settings,
-                    ...settings,
+            if (this.navbarService.settings.scroll.offset.autoTop) {
+                sets = {
+                    ...this.navbarService.settings,
+                    ...sets,
                     scroll: {
-                        ...this._settings.scroll,
+                        ...this.navbarService.settings.scroll,
                         offset: {
-                            ...this._settings.scroll.offset,
+                            ...this.navbarService.settings.scroll.offset,
                             top: this.elementHeight
                         }
                     }
                 }
             }
-            this.navbarService.mergeSettingObject(settings);
+            this.navbarService.mergeSettingObject(sets);
         });
 
     }
 
     ngAfterViewInit() {
         setTimeout(() => {
-            if (this._settings.spacer.autoHeight) {
+            if (this.navbarService.settings.spacer.autoHeight) {
                 this.elementHeight = this.navbar.nativeElement.offsetHeight;
-                this._settings = {
-                    ...this._settings,
+                const settings = {
+                    ...this.navbarService.settings,
                     spacer: {
-                        ...this._settings.spacer,
+                        ...this.navbarService.settings.spacer,
                         height: this.elementHeight
                     }
                 }
-                this.navbarService.mergeSettingObject(this._settings);
+                this.navbarService.mergeSettingObject(settings);
             }
         }, 0);
     }
@@ -88,6 +89,7 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
             this.elementHeight = this.navbar.nativeElement.offsetHeight;
         }
     }
+
     private get _resizeEvent(): Observable<Event> {
         return fromEvent(window, 'resize')
             .pipe(
