@@ -67,11 +67,14 @@
   }
   &__checkbox {
     display: flex;
-    margin-top: 10px;
+    &_centered {
+      justify-content: center;
+    }
   }
   &__range-label {
     position: absolute;
-    margin-top: -20px;
+    right: 0;
+    bottom: 0;
     color: #989898;
   }
 }

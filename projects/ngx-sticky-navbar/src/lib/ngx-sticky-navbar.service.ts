@@ -17,7 +17,7 @@ export class NgxStickyNavbarService {
   settings: Settings = this.initialSettings;
 
   setGlobalSettings(settings: Settings) {
-    this.settings = this.parseNewSettingsObject(this.settings, settings);
+    this.settings = this._parseNewSettingsObject(this.settings, settings);
   }
 
   mergeSettingObject(settings: Settings) {
@@ -25,7 +25,7 @@ export class NgxStickyNavbarService {
     this.changeSettings$.next(this.settings);
   }
 
-  parseNewSettingsObject(oldSets: Settings, newSets: Settings): Settings {
+  private _parseNewSettingsObject(oldSets: Settings, newSets: Settings): Settings {
     let sets: Settings = { ...oldSets, ...newSets, };
     if (!!newSets.spacer) {
       sets = { ...sets, ...this._setSpace(oldSets, newSets) }

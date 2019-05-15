@@ -8,7 +8,6 @@ import { DOCUMENT } from '@angular/common';
 @Directive({ selector: '[ngxSpeedScroll]' })
 export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
 
-
     @Output() isScrollDetected = new EventEmitter<string>();
 
     private _scrollableElement: HTMLElement = this.document.body;
@@ -25,12 +24,7 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
         this.navbarService.changeSettings$.pipe(
             takeUntil(this._destroy$),
             switchMap(_ => {
-                if (!!this.navbarService.settings.scroll.element) {
-                    const element = this.document.querySelector(this.navbarService.settings.scroll.element);
-                    if (!!element) {
-                        this._scrollableElement = element;
-                    }
-                }
+                this._defineScrollableElement();
                 if (!!this.navbarService.settings.spacer.element) {
                     this._showSpacer();
                 }
@@ -42,7 +36,6 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
             this._speedScrollDetection();
             this._previousScroll = this._scrollTop;
         });
-
     }
 
     ngOnDestroy() {
@@ -51,13 +44,25 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     }
 
     private _showSpacer() {
-        this._spacerCreator(
-            this.navbarService.settings.spacer.element,
-            this.navbarService.settings.spacer.type,
-            this.navbarService.settings.spacer.height
-        );
+        if (!!this.navbarService.settings.spacer.type && !!this.navbarService.settings.spacer.height) {
+            this._spacerCreator(
+                this.navbarService.settings.spacer.element,
+                this.navbarService.settings.spacer.type,
+                this.navbarService.settings.spacer.height
+            );
+        } else {
+            console.error('[ERROR] Spacer requires type and height definitions. One or both of those defs are not provided!');
+        }
     }
 
+    private _defineScrollableElement() {
+        if (!!this.navbarService.settings.scroll.element) {
+            const element = this.document.querySelector(this.navbarService.settings.scroll.element);
+            if (!!element) {
+                this._scrollableElement = element;
+            }
+        }
+    }
     private _spacerCreator(element: ElementRef, type: SpacerTypes, height: number) {
         this.renderer.setProperty(element.nativeElement, 'style', `${ type }:${ height }px`);
     }

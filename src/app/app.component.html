@@ -1,54 +1,53 @@
 <ngx-sticky-navbar [settings]="settings">
   <nav class="nav"
        [formGroup]="sensGroup">
-    <div class="nav__options"
-         formGroupName="sensitivity">
-      <div class="nav__option">
-        <h4>Sensitivity Scroll To Top</h4>
-        <div class="nav__option-wrapper">
-          <p class="nav__range-label">{{rangeLabelTop}}</p>
-          <input type="range"
-                 min="10"
-                 max="50"
-                 step="10"
-                 class="nav__range"
-                 formControlName="top">
-          <div class="nav__checkbox">
-            <label for="top">
-              lock show
-            </label>
-            <input type="checkbox"
-                   id="top"
-                   formControlName="checkboxesTop">
+    <div class="nav__options">
+      <ng-container formGroupName="sensitivity">
+        <div class="nav__option">
+          <h4>Sensitivity Scroll To Top</h4>
+          <div class="nav__option-wrapper">
+            <p class="nav__range-label">{{rangeLabelTop}}</p>
+            <input type="range"
+                   min="10"
+                   max="50"
+                   step="10"
+                   class="nav__range"
+                   formControlName="top">
+            <div class="nav__checkbox">
+              <label for="top">
+                lock show
+              </label>
+              <input type="checkbox"
+                     id="top"
+                     formControlName="checkboxesTop">
+            </div>
           </div>
         </div>
-      </div>
-      <div class="nav__option">
-        <h4>Sensitivity Scroll To Bottom</h4>
-        <div class="nav__option-wrapper">
-          <p class="nav__range-label">{{rangeLabelBottom}}</p>
-          <input type="range"
-                 min="10"
-                 max="50"
-                 step="10"
-                 class="nav__range"
-                 formControlName="bottom">
-          <div class="nav__checkbox">
-            <label for="bottom">
-              lock hide
-            </label>
-            <input type="checkbox"
-                   id="bottom"
-                   formControlName="checkboxesBottom">
+        <div class="nav__option">
+          <h4>Sensitivity Scroll To Bottom</h4>
+          <div class="nav__option-wrapper">
+            <p class="nav__range-label">{{rangeLabelBottom}}</p>
+            <input type="range"
+                   min="10"
+                   max="50"
+                   step="10"
+                   class="nav__range"
+                   formControlName="bottom">
+            <div class="nav__checkbox">
+              <label for="bottom">
+                lock hide
+              </label>
+              <input type="checkbox"
+                     id="bottom"
+                     formControlName="checkboxesBottom">
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="nav__options"
-         formGroupName="spacer">
-      <div class="nav__option">
+      </ng-container>
+      <div class="nav__option"
+           formGroupName="spacer">
         <div class="nav__option-wrapper">
-          <div class="nav__checkbox">
+          <div class="nav__checkbox nav__checkbox_centered">
             <label for="spacerToggler">
               <h4>Toggle Spacer</h4>
             </label>

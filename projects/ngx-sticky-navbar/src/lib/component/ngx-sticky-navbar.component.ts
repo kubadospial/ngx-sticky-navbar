@@ -11,13 +11,14 @@ import { Settings, NavbarState } from '../../../models';
 })
 
 export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestroy {
+    @Input() settings: Settings;
+    @ViewChild('navbar') navbar: ElementRef;
+
     navbarState = NavbarState;
     isNavbarState = NavbarState.SHOW;
     elementHeight = 0;
     private _destroy$ = new Subject<void>();
 
-    @Input() settings: Settings;
-    @ViewChild('navbar') navbar: ElementRef;
     constructor(private navbarService: NgxStickyNavbarService) { }
 
     ngOnInit() {

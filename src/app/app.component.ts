@@ -17,10 +17,6 @@ export class AppComponent {
   rangeLabelTop: string;
   rangeLabelBottom: string;
   settings: Settings = {
-    spacer: {
-      autoHeight: true,
-      type: SpacerTypes.PADDING
-    },
     scroll: {
       element: '.scrollable',
       offset: {
@@ -38,7 +34,7 @@ export class AppComponent {
         checkboxesBottom: new FormControl(false)
       }),
       spacer: new FormGroup({
-        spacerToggler: new FormControl(this.settings.spacer.autoHeight)
+        spacerToggler: new FormControl(true)
       })
     });
     this.sensGroup.patchValue(this._navbarService.initialSettings);
@@ -59,7 +55,6 @@ export class AppComponent {
         } else {
           sets.spacer = { autoHeight: false, height: 0 }
         }
-        console.log(sets)
         return sets;
       }),
       tap((stngs: Settings) => {
@@ -88,6 +83,8 @@ export class AppComponent {
       ...this.settings,
       spacer: {
         ...this.settings.spacer,
+        autoHeight: true,
+        type: SpacerTypes.PADDING,
         element: this.spacerElement,
       }
     };
