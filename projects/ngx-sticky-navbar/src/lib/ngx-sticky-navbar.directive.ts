@@ -47,7 +47,7 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     }
 
     private _showSpacer() {
-        if (!!this._settings.spacer.type && !!this._settings.spacer.height) {
+        if (this._settings.spacer.type !== undefined && this._settings.spacer.height !== undefined) {
             this._spacerCreator(
                 this._settings.spacer.element,
                 this._settings.spacer.type,
