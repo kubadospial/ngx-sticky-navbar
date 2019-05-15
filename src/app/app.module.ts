@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgxStickyNavbarModule } from 'projects/ngx-sticky-navbar';
 
+import { NgxStickyNavbarModule } from 'ngx-sticky-navbar';
 import { AppComponent } from './app.component';
 
 @NgModule({
