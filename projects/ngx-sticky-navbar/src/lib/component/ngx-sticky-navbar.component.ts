@@ -16,8 +16,10 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
 
     navbarState = NavbarState;
     isNavbarState = NavbarState.SHOW;
-    elementHeight = 0;
     private _destroy$ = new Subject<void>();
+    private get _settings(): Settings {
+        return this.navbarService.settings;
+    }
 
     constructor(private navbarService: NgxStickyNavbarService) { }
 
@@ -31,20 +33,16 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
                 )
             }),
             startWith([this.settings, new Event('resize')])
-        ).subscribe(([settings, _]: [Settings, Event]) => {
-            this.navbarService.mergeSettingObject(settings);
-        });
-
+        ).subscribe(([settings, _]: [Settings, Event]) => this.navbarService.mergeSettingObject(settings));
     }
 
     ngAfterViewInit() {
-        if (this.navbarService.settings.spacer.autoHeight) {
-            this.elementHeight = this.navbar.nativeElement.offsetHeight;
+        if (this._settings.spacer.autoHeight) {
             const settings = {
-                ...this.navbarService.settings,
+                ...this._settings,
                 spacer: {
-                    ...this.navbarService.settings.spacer,
-                    height: this.elementHeight
+                    ...this._settings.spacer,
+                    height: this._elementSpacerHeight
                 }
             }
             this.navbarService.mergeSettingObject(settings);
@@ -59,47 +57,53 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
 
     onScrollDetected(state: NavbarState) {
         this.isNavbarState = state;
-        if (state === NavbarState.HIDE) {
-            this.elementHeight = 0;
-        } else {
-            this.elementHeight = this.navbar.nativeElement.offsetHeight;
-        }
     }
 
     private _createSettingsObject() {
-        this.elementHeight = this.navbar.nativeElement.offsetHeight;
-
-        let sets: Settings = {};
-        if (this.navbarService.settings.spacer.autoHeight) {
-            sets = {
-                ...this.navbarService.settings,
+        let settings: Settings = {};
+        if (this._settings.spacer.autoHeight) {
+            settings = {
+                ...this._settings,
                 spacer: {
-                    ...this.navbarService.settings.spacer,
-                    height: this.elementHeight
+                    ...this._settings.spacer,
+                    height: this._elementOffsetTopHeight
                 }
             }
         }
-        if (this.navbarService.settings.scroll.offset.autoTop) {
-            sets = {
-                ...this.navbarService.settings,
-                ...sets,
+        if (this._settings.scroll.offset.autoTop) {
+            settings = {
+                ...this._settings,
+                ...settings,
                 scroll: {
-                    ...this.navbarService.settings.scroll,
+                    ...this._settings.scroll,
                     offset: {
-                        ...this.navbarService.settings.scroll.offset,
-                        top: this.elementHeight
+                        ...this._settings.scroll.offset,
+                        top: this._elementSpacerHeight
                     }
                 }
             }
         }
-        this.navbarService.setGlobalSettings(sets);
+        this.navbarService.setGlobalSettings(settings);
     }
 
     private get _resizeEvent(): Observable<Event> {
         return fromEvent(window, 'resize')
-            .pipe(
-                debounceTime(100)
-            )
+            .pipe(debounceTime(100));
+    }
+
+    private get _elementOffsetTopHeight(): number {
+        if (this._settings.scroll.offset.autoTop) {
+            return this.navbar.nativeElement.offsetHeight;
+        } else {
+            return this._settings.scroll.offset.top;
+        }
+    }
+    private get _elementSpacerHeight(): number {
+        if (this._settings.spacer.autoHeight) {
+            return this.navbar.nativeElement.offsetHeight;
+        } else {
+            return this._settings.spacer.height;
+        }
     }
 
 }

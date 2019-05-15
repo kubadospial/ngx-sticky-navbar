@@ -1,7 +1,7 @@
 import { Directive, OnInit, OnDestroy, Output, EventEmitter, Inject, ElementRef, Renderer2 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
-import { DefinedSensitivity, NavbarState, SpacerTypes } from '../../models';
+import { DefinedSensitivity, NavbarState, SpacerTypes, Settings } from '../../models';
 import { NgxStickyNavbarService } from './ngx-sticky-navbar.service';
 import { DOCUMENT } from '@angular/common';
 
@@ -14,6 +14,9 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     private _previousScroll = 0;
     private _scrollTop = 0;
     private _destroy$ = new Subject<void>();
+    private get _settings(): Settings {
+        return this.navbarService.settings;
+    }
 
     constructor(
         @Inject(DOCUMENT) private document,
@@ -44,11 +47,11 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     }
 
     private _showSpacer() {
-        if (!!this.navbarService.settings.spacer.type && !!this.navbarService.settings.spacer.height) {
+        if (!!this._settings.spacer.type && !!this._settings.spacer.height) {
             this._spacerCreator(
-                this.navbarService.settings.spacer.element,
-                this.navbarService.settings.spacer.type,
-                this.navbarService.settings.spacer.height
+                this._settings.spacer.element,
+                this._settings.spacer.type,
+                this._settings.spacer.height
             );
         } else {
             console.error('[ERROR] Spacer requires type and height definitions. One or both of those defs are not provided!');
@@ -56,8 +59,8 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     }
 
     private _defineScrollableElement() {
-        if (!!this.navbarService.settings.scroll.element) {
-            const element = this.document.querySelector(this.navbarService.settings.scroll.element);
+        if (!!this._settings.scroll.element) {
+            const element = this.document.querySelector(this._settings.scroll.element);
             if (!!element) {
                 this._scrollableElement = element;
             }
@@ -68,7 +71,7 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     }
 
     private _isScrolledToTopWithOffset() {
-        if (this._scrollTop <= this.navbarService.settings.scroll.offset.top && this._isScrollingTop) {
+        if (this._scrollTop <= this._settings.scroll.offset.top && this._isScrollingTop) {
             this.isScrollDetected.next(NavbarState.SHOW);
         }
     }
@@ -83,20 +86,20 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
 
     private get _senseSpeedTop(): number {
         let speedSenseTop = 0;
-        if (typeof this.navbarService.settings.sensitivity.top === 'string') {
-            speedSenseTop = DefinedSensitivity[this.navbarService.settings.sensitivity.top];
+        if (typeof this._settings.sensitivity.top === 'string') {
+            speedSenseTop = DefinedSensitivity[this._settings.sensitivity.top];
         } else {
-            speedSenseTop = this.navbarService.settings.sensitivity.top;
+            speedSenseTop = this._settings.sensitivity.top;
         }
         return speedSenseTop;
     }
 
     private get _senseSpeedBottom(): number {
         let speedSenseBottom = 0;
-        if (typeof this.navbarService.settings.sensitivity.bottom === 'string') {
-            speedSenseBottom = DefinedSensitivity[this.navbarService.settings.sensitivity.bottom];
+        if (typeof this._settings.sensitivity.bottom === 'string') {
+            speedSenseBottom = DefinedSensitivity[this._settings.sensitivity.bottom];
         } else {
-            speedSenseBottom = this.navbarService.settings.sensitivity.bottom;
+            speedSenseBottom = this._settings.sensitivity.bottom;
         }
         return speedSenseBottom;
     }

@@ -12,8 +12,18 @@ import { map, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 export class AppComponent {
   @ViewChild('spacerElement') spacerElement: ElementRef;
 
-  sensGroup: FormGroup;
-  definedSensitivity = DefinedSensitivity;
+  sensGroup = new FormGroup({
+    sensitivity: new FormGroup({
+      top: new FormControl(),
+      bottom: new FormControl(),
+      checkboxesTop: new FormControl(false),
+      checkboxesBottom: new FormControl(false)
+    }),
+    spacer: new FormGroup({
+      spacerToggler: new FormControl(true)
+    })
+  });
+
   rangeLabelTop: string;
   rangeLabelBottom: string;
   settings: Settings = {
@@ -25,21 +35,14 @@ export class AppComponent {
     }
   };
 
-  constructor(private _navbarService: NgxStickyNavbarService) {
-    this.sensGroup = new FormGroup({
-      sensitivity: new FormGroup({
-        top: new FormControl(),
-        bottom: new FormControl(),
-        checkboxesTop: new FormControl(false),
-        checkboxesBottom: new FormControl(false)
-      }),
-      spacer: new FormGroup({
-        spacerToggler: new FormControl(true)
-      })
-    });
-    this.sensGroup.patchValue(this._navbarService.initialSettings);
-    this._getRangeLabelTop(this._navbarService.initialSettings);
-    this._getRangeLabelBottom(this._navbarService.initialSettings);
+  private get _settings(): Settings {
+    return this.navbarService.settings;
+  }
+
+  constructor(private navbarService: NgxStickyNavbarService) {
+    this.sensGroup.patchValue(this._settings);
+    this._getRangeLabelTop(this._settings);
+    this._getRangeLabelBottom(this._settings);
     this.sensGroup.valueChanges.pipe(
       map(settings => {
         if (settings.sensitivity.checkboxesTop) {
@@ -51,7 +54,7 @@ export class AppComponent {
         const sets: Settings = { sensitivity: {} };
         sets.sensitivity = { top: settings.sensitivity.top, bottom: settings.sensitivity.bottom };
         if (settings.spacer.spacerToggler) {
-          sets.spacer = { ...this._navbarService.settings.spacer, autoHeight: true }
+          sets.spacer = { ...this._settings.spacer, autoHeight: true }
         } else {
           sets.spacer = { autoHeight: false, height: 0 }
         }
@@ -66,7 +69,7 @@ export class AppComponent {
       debounceTime(100)
     ).subscribe((settings: Settings) => {
       this.settings = { ...this.settings, ...settings };
-      this._navbarService.mergeSettingObject(this.settings);
+      this.navbarService.mergeSettingObject(this.settings);
     });
 
     this.sensGroup.get('sensitivity').get('checkboxesTop').valueChanges.subscribe(status => {
@@ -88,14 +91,14 @@ export class AppComponent {
         element: this.spacerElement,
       }
     };
-    this._navbarService.mergeSettingObject(this.settings);
+    this.navbarService.mergeSettingObject(this.settings);
   }
 
   private _getRangeLabelTop(settings: Settings) {
-    this.rangeLabelTop = this.definedSensitivity[settings.sensitivity.top];
+    this.rangeLabelTop = DefinedSensitivity[settings.sensitivity.top];
   }
 
   private _getRangeLabelBottom(settings: Settings) {
-    this.rangeLabelBottom = this.definedSensitivity[settings.sensitivity.bottom];
+    this.rangeLabelBottom = DefinedSensitivity[settings.sensitivity.bottom];
   }
 }
