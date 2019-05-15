@@ -1,12 +1,7 @@
-<ng-container *ngIf="!isAutoTopOffsetDisabled">
-    <div class="ngx-speed-scroll-spacer"
-         [ngStyle]="{'height': elementHeight + 'px'}"></div>
-</ng-container>
 <div class="ngx-speed-scroll"
      ngxSpeedScroll
      #navbar
      [ngClass]="{'ngx-speed-scroll_hidden': isNavbarState === navbarState.HIDE}"
-     [settings]="settings"
      (isScrollDetected)="onScrollDetected($event)">
     <ng-content></ng-content>
 </div>

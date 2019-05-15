@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { NgxStickyNavbarService } from '../ngx-sticky-navbar.service';
-import { Subject, fromEvent } from 'rxjs';
-import { takeUntil, debounceTime } from 'rxjs/operators';
+import { Subject, fromEvent, of, Observable } from 'rxjs';
+import { takeUntil, debounceTime, combineLatest, switchMap, startWith } from 'rxjs/operators';
 import { Settings, NavbarState } from '../../../models';
 
 @Component({
@@ -11,39 +10,44 @@ import { Settings, NavbarState } from '../../../models';
     styleUrls: ['./ngx-sticky-navbar.component.scss']
 })
 
-export class NgxStickyNavbarComponent implements OnInit, OnDestroy {
+export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() settings: Settings;
-    @Input() isAutoTopOffsetDisabled = true;
-    @Input() isSpacerDisabled = true;
     @ViewChild('navbar') navbar: ElementRef;
 
     navbarState = NavbarState;
     isNavbarState = NavbarState.SHOW;
-    elementHeight = 0;
-
     private _destroy$ = new Subject<void>();
+    private get _settings(): Settings {
+        return this.navbarService.settings;
+    }
 
-    constructor(private scrollService: NgxStickyNavbarService, @Inject(DOCUMENT) private document) { }
+    constructor(private navbarService: NgxStickyNavbarService) { }
 
     ngOnInit() {
-        if (!this.isAutoTopOffsetDisabled) {
-            this.elementHeight = this.navbar.nativeElement.offsetHeight;
-        }
-        if (!this.isAutoTopOffsetDisabled) {
-            this.scrollService.initialSettings.topOffset = this.navbar.nativeElement.offsetHeight;
-            fromEvent(this.document.body, 'resize')
-                .pipe(
-                    debounceTime(100),
-                    takeUntil(this._destroy$)
+        this.navbarService.changeSettings$.pipe(
+            takeUntil(this._destroy$),
+            switchMap((settings: Settings) => {
+                this._createSettingsObject();
+                return of(settings).pipe(
+                    combineLatest(this._resizeEvent)
                 )
-                .subscribe(_ => {
-                    this.elementHeight = this.navbar.nativeElement.offsetHeight;
-                    const settings: Settings = {
-                        topOffset: this.navbar.nativeElement.offsetHeight
-                    };
-                    this.scrollService.changeSettings$.next(settings);
-                });
+            }),
+            startWith([this.settings, new Event('resize')])
+        ).subscribe(([settings, _]: [Settings, Event]) => this.navbarService.mergeSettingObject(settings));
+    }
+
+    ngAfterViewInit() {
+        if (this._settings.spacer.autoHeight) {
+            const settings = {
+                ...this._settings,
+                spacer: {
+                    ...this._settings.spacer,
+                    height: this._elementSpacerHeight
+                }
+            }
+            this.navbarService.setGlobalSettings(settings);
         }
+        this.navbarService.mergeSettingObject(this.settings);
     }
 
     ngOnDestroy() {
@@ -51,7 +55,56 @@ export class NgxStickyNavbarComponent implements OnInit, OnDestroy {
         this._destroy$.complete();
     }
 
+
     onScrollDetected(state: NavbarState) {
         this.isNavbarState = state;
     }
+
+    private _createSettingsObject() {
+        let settings: Settings = {};
+        if (this._settings.spacer.autoHeight) {
+            settings = {
+                ...this._settings,
+                spacer: {
+                    ...this._settings.spacer,
+                    height: this._elementSpacerHeight
+                }
+            }
+        }
+        if (this._settings.scroll.offset.autoTop) {
+            settings = {
+                ...this._settings,
+                ...settings,
+                scroll: {
+                    ...this._settings.scroll,
+                    offset: {
+                        ...this._settings.scroll.offset,
+                        top: this._elementOffsetTopHeight
+                    }
+                }
+            }
+        }
+        this.navbarService.setGlobalSettings(settings);
+    }
+
+    private get _resizeEvent(): Observable<Event> {
+        return fromEvent(window, 'resize')
+            .pipe(debounceTime(100));
+    }
+
+    private get _elementOffsetTopHeight(): number {
+        if (this._settings.scroll.offset.autoTop) {
+            return this.navbar.nativeElement.offsetHeight;
+        } else {
+            return this._settings.scroll.offset.top;
+        }
+    }
+    private get _elementSpacerHeight(): number {
+        if (this._settings.spacer.autoHeight) {
+            return this.navbar.nativeElement.offsetHeight;
+        } else {
+            return this._settings.spacer.height;
+        }
+    }
+
 }
