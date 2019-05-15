@@ -45,8 +45,9 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
                     height: this._elementSpacerHeight
                 }
             }
-            this.navbarService.mergeSettingObject(settings);
+            this.navbarService.setGlobalSettings(settings);
         }
+        this.navbarService.mergeSettingObject(this.settings);
     }
 
     ngOnDestroy() {
@@ -66,7 +67,7 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
                 ...this._settings,
                 spacer: {
                     ...this._settings.spacer,
-                    height: this._elementOffsetTopHeight
+                    height: this._elementSpacerHeight
                 }
             }
         }
@@ -78,7 +79,7 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
                     ...this._settings.scroll,
                     offset: {
                         ...this._settings.scroll.offset,
-                        top: this._elementSpacerHeight
+                        top: this._elementOffsetTopHeight
                     }
                 }
             }

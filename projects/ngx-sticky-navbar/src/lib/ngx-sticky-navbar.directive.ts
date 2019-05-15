@@ -14,9 +14,6 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
     private _previousScroll = 0;
     private _scrollTop = 0;
     private _destroy$ = new Subject<void>();
-    private get _settings(): Settings {
-        return this.navbarService.settings;
-    }
 
     constructor(
         @Inject(DOCUMENT) private document,
@@ -82,6 +79,10 @@ export class NgxStickyNavbarDirective implements OnInit, OnDestroy {
         } else if (this._scrollTop - this._senseSpeedBottom > this._previousScroll) {
             this.isScrollDetected.next(NavbarState.HIDE);
         }
+    }
+
+    private get _settings(): Settings {
+        return this.navbarService.settings;
     }
 
     private get _senseSpeedTop(): number {
