@@ -84,7 +84,6 @@ export class AppComponent {
     this.settings = {
       ...this.settings,
       spacer: {
-        ...this.settings.spacer,
         autoHeight: true,
         type: SpacerTypes.PADDING,
         element: this.spacerElement,
