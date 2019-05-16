@@ -1,8 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Settings, DefinedSensitivity, SpacerTypes } from 'projects/ngx-sticky-navbar/models';
 import { FormGroup, FormControl } from '@angular/forms';
-import { NgxStickyNavbarService } from 'projects/ngx-sticky-navbar';
 import { map, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { Settings, NgxStickyNavbarService, DefinedSensitivity, SpacerTypes } from 'ngx-sticky-navbar';
 
 @Component({
   selector: 'app-root',
@@ -85,7 +84,6 @@ export class AppComponent {
     this.settings = {
       ...this.settings,
       spacer: {
-        ...this.settings.spacer,
         autoHeight: true,
         type: SpacerTypes.PADDING,
         element: this.spacerElement,

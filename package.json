@@ -1,5 +1,5 @@
 {
-  "name": "scroll-speed",
+  "name": "sticky-navbar",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:project": "ng build ngx-sticky-navbar",
+    "build:github-page": "ng build --prod --base-href \"ngx-sticky-navbar\" && ngh --dir dist/sticky-navbar"
   },
   "private": true,
   "dependencies": {
@@ -22,7 +24,8 @@
     "@angular/router": "~7.0.0",
     "core-js": "^2.5.4",
     "rxjs": "~6.3.3",
-    "zone.js": "~0.8.26"
+    "zone.js": "~0.8.26",
+    "ngx-sticky-navbar": "1.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",

@@ -1,9 +1,32 @@
 {
   "name": "ngx-sticky-navbar",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "ngx-sticky-navbar is an Angular 6+ component that wrapps your navigation and it has some cool features.",
   "peerDependencies": {
     "@angular/common": ">=6.0.0",
     "@angular/core": ">=6.0.0",
     "rxjs": ">=6.0.0"
-  }
+  },
+  "keywords": [
+    "component",
+    "angular",
+    "library",
+    "navbar",
+    "ngx",
+    "sticky",
+    "nav",
+    "navigation",
+    "wrapper"
+  ],
+  "repository": {
+    "url": "https://github.com/kubadospial/ngx-sticky-navbar.git",
+    "type": "git"
+  },
+  "author": "kubadospial (@kubadospial)",
+  "bugs": {
+    "url": "https://github.com/kubadospial/ngx-sticky-navbar/issues"
+  },
+  "homepage": "https://github.com/kubadospial",
+  "readmeFilename": "README.md"
 }

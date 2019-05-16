@@ -4415,6 +4415,13 @@ ng-packagr@^4.2.0:
     uglify-js "^3.0.7"
     update-notifier "^2.3.0"
 
+ngx-sticky-navbar@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-sticky-navbar/-/ngx-sticky-navbar-1.0.0.tgz#c57e4be5ed31d40fb0c9db9a37fa42608122dccb"
+  integrity sha512-W1ojn+Vbx7NQXWi/ByM3x5RQvubwDb6GBM5iORIobXU0Vw/8F1s71qhuYypnU0G1rBnWkGV5KDuUjUzN7uoe7w==
+  dependencies:
+    tslib "^1.9.0"
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"

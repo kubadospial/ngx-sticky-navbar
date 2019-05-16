@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, Inp
 import { NgxStickyNavbarService } from '../ngx-sticky-navbar.service';
 import { Subject, fromEvent, of, Observable } from 'rxjs';
 import { takeUntil, debounceTime, combineLatest, switchMap, startWith } from 'rxjs/operators';
-import { Settings, NavbarState } from '../../../models';
+import { Settings, NavbarState } from '../models';
 
 @Component({
     selector: 'ngx-sticky-navbar',

@@ -1,7 +1,7 @@
 import { Directive, OnInit, OnDestroy, Output, EventEmitter, Inject, ElementRef, Renderer2 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
-import { DefinedSensitivity, NavbarState, SpacerTypes, Settings } from '../../models';
+import { DefinedSensitivity, NavbarState, SpacerTypes, Settings } from './models';
 import { NgxStickyNavbarService } from './ngx-sticky-navbar.service';
 import { DOCUMENT } from '@angular/common';
 
