@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { map, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { Settings, NgxStickyNavbarService, DefinedSensitivity, SpacerTypes } from 'ngx-sticky-navbar';
@@ -8,7 +8,7 @@ import { Settings, NgxStickyNavbarService, DefinedSensitivity, SpacerTypes } fro
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   @ViewChild('spacerElement') spacerElement: ElementRef;
 
   sensGroup = new FormGroup({
@@ -53,9 +53,9 @@ export class AppComponent {
         const sets: Settings = { sensitivity: {} };
         sets.sensitivity = { top: settings.sensitivity.top, bottom: settings.sensitivity.bottom };
         if (settings.spacer.spacerToggler) {
-          sets.spacer = { ...this._settings.spacer, autoHeight: true }
+          sets.spacer = { ...this._settings.spacer, autoHeight: true };
         } else {
-          sets.spacer = { autoHeight: false, height: 0 }
+          sets.spacer = { autoHeight: false, height: 0 };
         }
         return sets;
       }),

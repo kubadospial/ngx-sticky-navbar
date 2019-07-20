@@ -1,6 +1,6 @@
 {
   "name": "ngx-sticky-navbar",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "license": "MIT",
   "description": "ngx-sticky-navbar is an Angular 6+ component that wrapps your navigation and it has some cool features.",
   "peerDependencies": {

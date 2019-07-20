@@ -30,7 +30,7 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
                 this._createSettingsObject();
                 return of(settings).pipe(
                     combineLatest(this._resizeEvent)
-                )
+                );
             }),
             startWith([this.settings, new Event('resize')])
         ).subscribe(([settings, _]: [Settings, Event]) => this.navbarService.mergeSettingObject(settings));
@@ -44,7 +44,7 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
                     ...this._settings.spacer,
                     height: this._elementSpacerHeight
                 }
-            }
+            };
             this.navbarService.setGlobalSettings(settings);
         }
         this.navbarService.mergeSettingObject(this.settings);
@@ -69,7 +69,7 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
                     ...this._settings.spacer,
                     height: this._elementSpacerHeight
                 }
-            }
+            };
         }
         if (this._settings.scroll.offset.autoTop) {
             settings = {
@@ -82,7 +82,7 @@ export class NgxStickyNavbarComponent implements OnInit, AfterViewInit, OnDestro
                         top: this._elementOffsetTopHeight
                     }
                 }
-            }
+            };
         }
         this.navbarService.setGlobalSettings(settings);
     }
