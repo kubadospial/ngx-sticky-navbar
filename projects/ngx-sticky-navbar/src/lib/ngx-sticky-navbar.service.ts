@@ -28,13 +28,13 @@ export class NgxStickyNavbarService {
   private _parseNewSettingsObject(oldSets: Settings, newSets: Settings): Settings {
     let sets: Settings = { ...oldSets, ...newSets, };
     if (!!newSets.spacer) {
-      sets = { ...sets, ...this._setSpace(oldSets, newSets) }
+      sets = { ...sets, ...this._setSpace(oldSets, newSets) };
     }
     if (!!newSets.sensitivity) {
-      sets = { ...sets, ...this._setSensitivity(oldSets, newSets) }
+      sets = { ...sets, ...this._setSensitivity(oldSets, newSets) };
     }
     if (!!newSets.scroll) {
-      sets = { ...sets, ...this._setScroll(oldSets, newSets) }
+      sets = { ...sets, ...this._setScroll(oldSets, newSets) };
     }
     return sets;
   }
@@ -42,12 +42,12 @@ export class NgxStickyNavbarService {
   private _setSpace(oldSets: Settings, newSets: Settings) {
     return {
       spacer: { ...oldSets.spacer, ...newSets.spacer, }
-    }
+    };
   }
   private _setSensitivity(oldSets: Settings, newSets: Settings) {
     return {
       sensitivity: { ...oldSets.sensitivity, ...newSets.sensitivity }
-    }
+    };
   }
 
   private _setScroll(oldSets: Settings, newSets: Settings) {
@@ -56,7 +56,7 @@ export class NgxStickyNavbarService {
         ...oldSets.scroll, ...newSets.scroll,
         offset: { ...oldSets.scroll.offset, ...newSets.scroll.offset }
       }
-    }
+    };
   }
 
 }
